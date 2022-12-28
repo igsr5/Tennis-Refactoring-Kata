@@ -35,6 +35,22 @@ Deno.test("TennisGame1", async (t) => {
       });
     })
   );
+
+  t.step({
+    name: ".getCurrentWinner",
+    fn: () => {
+      // setup
+      const game = new TennisGame1("player1", "player2");
+
+      // exercise
+      game.wonPoint("player1");
+      game.wonPoint("player1");
+      game.wonPoint("player2");
+
+      // verify
+      assertEquals(game.getCurrentWinner(), "player1");
+    },
+  });
 });
 
 Deno.test("TennisGame2", async (t) => {

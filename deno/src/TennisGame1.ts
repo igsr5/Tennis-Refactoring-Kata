@@ -23,6 +23,12 @@ export class TennisGame1 implements TennisGame {
     else this.m_score2 += 1;
   }
 
+  getCurrentWinner(): string {
+    if (this.m_score1 > this.m_score2) return this.player1Name;
+    else if (this.m_score1 < this.m_score2) return this.player2Name;
+    else return "";
+  }
+
   getScore(): string {
     let score: string = "";
 
@@ -42,17 +48,9 @@ export class TennisGame1 implements TennisGame {
           score = `${POINT_NAME[this.m_score1]}-${POINT_NAME[this.m_score2]}`;
       }
     } else if (isAdvantage) {
-      if (this.m_score1 > this.m_score2) {
-        score = "Advantage player1";
-      } else {
-        score = "Advantage player2";
-      }
+      score = `Advantage ${this.getCurrentWinner()}`;
     } else if (isFinished) {
-      if (this.m_score1 > this.m_score2) {
-        score = "Win for player1";
-      } else {
-        score = "Win for player2";
-      }
+      score = `Win for ${this.getCurrentWinner()}`;
     }
 
     return score;
