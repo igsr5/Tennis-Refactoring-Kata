@@ -29,30 +29,33 @@ export class TennisGame1 implements TennisGame {
     else return "";
   }
 
-  getScore(): string {
-    let score: string = "";
+  getScoreDiff(): number {
+    return Math.abs(this.m_score1 - this.m_score2);
+  }
 
-    const diff = Math.abs(this.m_score1 - this.m_score2);
+  isFinished(): boolean {
+    return (
+      (this.m_score1 >= 4 || this.m_score2 >= 4) && this.getScoreDiff() >= 2
+    );
+  }
+
+  getScore(): string {
+    const diff = this.getScoreDiff();
     const isAdvantage =
       (this.m_score1 >= 4 || this.m_score2 >= 4) && diff === 1;
-    const isFinished = (this.m_score1 >= 4 || this.m_score2 >= 4) && diff >= 2;
-    const isContinue = !isAdvantage && !isFinished;
+    const isDeuce = this.m_score1 >= 3 && diff === 0;
 
-    if (isContinue) {
-      const isDeuce = this.m_score1 >= 3 && this.m_score1 === this.m_score2;
-      if (isDeuce) score = "Deuce";
-      else {
-        if (this.m_score1 === this.m_score2)
-          score = `${POINT_NAME[this.m_score1]}-All`;
-        else
-          score = `${POINT_NAME[this.m_score1]}-${POINT_NAME[this.m_score2]}`;
-      }
-    } else if (isAdvantage) {
-      score = `Advantage ${this.getCurrentWinner()}`;
-    } else if (isFinished) {
-      score = `Win for ${this.getCurrentWinner()}`;
+    switch (true) {
+      case isAdvantage:
+        return `Advantage ${this.getCurrentWinner()}`;
+      case this.isFinished():
+        return `Win for ${this.getCurrentWinner()}`;
+      case isDeuce:
+        return "Deuce";
+      default:
+        return diff === 0
+          ? `${POINT_NAME[this.m_score1]}-All`
+          : `${POINT_NAME[this.m_score1]}-${POINT_NAME[this.m_score2]}`;
     }
-
-    return score;
   }
 }
