@@ -35,6 +35,66 @@ Deno.test("TennisGame1", async (t) => {
       });
     })
   );
+
+  await t.step({
+    name: ".getCurrentWinner",
+    fn: () => {
+      // setup
+      const game = new TennisGame1("player1", "player2");
+
+      // exercise
+      game.wonPoint("player1");
+      game.wonPoint("player1");
+      game.wonPoint("player2");
+
+      // verify
+      assertEquals(game.getCurrentWinner(), "player1");
+    },
+  });
+
+  await t.step({
+    name: ".isFinished",
+    fn: () => {
+      // setup
+      const game = new TennisGame1("player1", "player2");
+
+      // exercise
+      [...Array(4)].forEach(() => game.wonPoint("player1"));
+
+      // verify
+      assertEquals(game.isFinished(), true);
+    },
+  });
+
+  await t.step({
+    name: ".isAdvantage",
+    fn: () => {
+      // setup
+      const game = new TennisGame1("player1", "player2");
+
+      // exercise
+      [...Array(4)].forEach(() => game.wonPoint("player1"));
+      [...Array(5)].forEach(() => game.wonPoint("player2"));
+
+      // verify
+      assertEquals(game.isAdvantage(), true);
+    },
+  });
+
+  await t.step({
+    name: ".isDuece",
+    fn: () => {
+      // setup
+      const game = new TennisGame1("player1", "player2");
+
+      // exercise
+      [...Array(4)].forEach(() => game.wonPoint("player1"));
+      [...Array(4)].forEach(() => game.wonPoint("player2"));
+
+      // verify
+      assertEquals(game.isDuece(), true);
+    },
+  });
 });
 
 Deno.test("TennisGame2", async (t) => {

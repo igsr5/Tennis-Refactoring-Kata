@@ -1,68 +1,77 @@
 import { TennisGame } from "./TennisGame.ts";
 
+const POINT_NAME: Record<number, string> = {
+  0: "Love",
+  1: "Fifteen",
+  2: "Thirty",
+  3: "Forty",
+};
+
 export class TennisGame1 implements TennisGame {
-  private m_score1: number = 0;
-  private m_score2: number = 0;
-  private player1Name: string;
-  private player2Name: string;
+  private readonly player1Name: string;
+  private readonly player2Name: string;
+  private readonly score: Map<string, number> = new Map();
 
   constructor(player1Name: string, player2Name: string) {
     this.player1Name = player1Name;
     this.player2Name = player2Name;
+    this.score.set(player1Name, 0);
+    this.score.set(player2Name, 0);
   }
 
   wonPoint(playerName: string): void {
-    if (playerName === "player1") this.m_score1 += 1;
-    else this.m_score2 += 1;
+    this.score.set(playerName, this.score.get(playerName)! + 1);
+  }
+
+  /**
+   * @returns [player1Score, player2Score]
+   */
+  getCurrentScore(): [number, number] {
+    return [
+      this.score.get(this.player1Name)!,
+      this.score.get(this.player2Name)!,
+    ];
+  }
+
+  getCurrentWinner(): string {
+    const [p1Score, p2Score] = this.getCurrentScore();
+    if (p1Score > p2Score) return this.player1Name;
+    if (p1Score < p2Score) return this.player2Name;
+    return "";
+  }
+
+  getScoreDiff(): number {
+    const [p1Score, p2Score] = this.getCurrentScore();
+    return Math.abs(p1Score - p2Score);
+  }
+
+  isFinished(): boolean {
+    const [p1Score, p2Score] = this.getCurrentScore();
+    return (p1Score >= 4 || p2Score >= 4) && this.getScoreDiff() >= 2;
+  }
+
+  isAdvantage(): boolean {
+    const [p1Score, p2Score] = this.getCurrentScore();
+    return (p1Score >= 4 || p2Score >= 4) && this.getScoreDiff() === 1;
+  }
+
+  isDuece(): boolean {
+    return this.score.get(this.player1Name)! >= 3 && this.getScoreDiff() === 0;
   }
 
   getScore(): string {
-    let score: string = "";
-    let tempScore: number = 0;
-    if (this.m_score1 === this.m_score2) {
-      switch (this.m_score1) {
-        case 0:
-          score = "Love-All";
-          break;
-        case 1:
-          score = "Fifteen-All";
-          break;
-        case 2:
-          score = "Thirty-All";
-          break;
-        default:
-          score = "Deuce";
-          break;
-      }
-    } else if (this.m_score1 >= 4 || this.m_score2 >= 4) {
-      const minusResult: number = this.m_score1 - this.m_score2;
-      if (minusResult === 1) score = "Advantage player1";
-      else if (minusResult === -1) score = "Advantage player2";
-      else if (minusResult >= 2) score = "Win for player1";
-      else score = "Win for player2";
-    } else {
-      for (let i = 1; i < 3; i++) {
-        if (i === 1) tempScore = this.m_score1;
-        else {
-          score += "-";
-          tempScore = this.m_score2;
-        }
-        switch (tempScore) {
-          case 0:
-            score += "Love";
-            break;
-          case 1:
-            score += "Fifteen";
-            break;
-          case 2:
-            score += "Thirty";
-            break;
-          case 3:
-            score += "Forty";
-            break;
-        }
-      }
+    const [p1Score, p2Score] = this.getCurrentScore();
+    switch (true) {
+      case this.isAdvantage():
+        return `Advantage ${this.getCurrentWinner()}`;
+      case this.isFinished():
+        return `Win for ${this.getCurrentWinner()}`;
+      case this.isDuece():
+        return "Deuce";
+      default: // game is continued
+        return this.getScoreDiff() === 0
+          ? `${POINT_NAME[p1Score]}-All`
+          : `${POINT_NAME[p1Score]}-${POINT_NAME[p2Score]}`;
     }
-    return score;
   }
 }
