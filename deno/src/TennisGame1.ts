@@ -39,14 +39,18 @@ export class TennisGame1 implements TennisGame {
     );
   }
 
+  isAdvantage(): boolean {
+    return (
+      (this.m_score1 >= 4 || this.m_score2 >= 4) && this.getScoreDiff() === 1
+    );
+  }
+
   getScore(): string {
     const diff = this.getScoreDiff();
-    const isAdvantage =
-      (this.m_score1 >= 4 || this.m_score2 >= 4) && diff === 1;
     const isDeuce = this.m_score1 >= 3 && diff === 0;
 
     switch (true) {
-      case isAdvantage:
+      case this.isAdvantage():
         return `Advantage ${this.getCurrentWinner()}`;
       case this.isFinished():
         return `Win for ${this.getCurrentWinner()}`;

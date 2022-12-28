@@ -59,13 +59,25 @@ Deno.test("TennisGame1", async (t) => {
       const game = new TennisGame1("player1", "player2");
 
       // exercise
-      game.wonPoint("player1");
-      game.wonPoint("player1");
-      game.wonPoint("player1");
-      game.wonPoint("player1");
+      [...Array(4)].forEach(() => game.wonPoint("player1"));
 
       // verify
       assertEquals(game.isFinished(), true);
+    },
+  });
+
+  await t.step({
+    name: ".isAdvantage",
+    fn: () => {
+      // setup
+      const game = new TennisGame1("player1", "player2");
+
+      // exercise
+      [...Array(4)].forEach(() => game.wonPoint("player1"));
+      [...Array(5)].forEach(() => game.wonPoint("player2"));
+
+      // verify
+      assertEquals(game.isAdvantage(), true);
     },
   });
 });
