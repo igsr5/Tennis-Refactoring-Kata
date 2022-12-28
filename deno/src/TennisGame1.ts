@@ -45,16 +45,18 @@ export class TennisGame1 implements TennisGame {
     );
   }
 
+  isDuece(): boolean {
+    return this.m_score1 >= 3 && this.getScoreDiff() === 0;
+  }
+
   getScore(): string {
     const diff = this.getScoreDiff();
-    const isDeuce = this.m_score1 >= 3 && diff === 0;
-
     switch (true) {
       case this.isAdvantage():
         return `Advantage ${this.getCurrentWinner()}`;
       case this.isFinished():
         return `Win for ${this.getCurrentWinner()}`;
-      case isDeuce:
+      case this.isDuece():
         return "Deuce";
       default:
         return diff === 0

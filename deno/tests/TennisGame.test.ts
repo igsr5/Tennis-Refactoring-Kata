@@ -80,6 +80,21 @@ Deno.test("TennisGame1", async (t) => {
       assertEquals(game.isAdvantage(), true);
     },
   });
+
+  await t.step({
+    name: ".isDuece",
+    fn: () => {
+      // setup
+      const game = new TennisGame1("player1", "player2");
+
+      // exercise
+      [...Array(4)].forEach(() => game.wonPoint("player1"));
+      [...Array(4)].forEach(() => game.wonPoint("player2"));
+
+      // verify
+      assertEquals(game.isDuece(), true);
+    },
+  });
 });
 
 Deno.test("TennisGame2", async (t) => {
