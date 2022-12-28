@@ -39,11 +39,22 @@ export class TennisGame1 implements TennisGame {
       }
       // NOTE: when finish the game, or advantage
     } else if (this.m_score1 >= 4 || this.m_score2 >= 4) {
-      const minusResult: number = this.m_score1 - this.m_score2;
-      if (minusResult === 1) score = "Advantage player1";
-      else if (minusResult === -1) score = "Advantage player2";
-      else if (minusResult >= 2) score = "Win for player1";
-      else score = "Win for player2";
+      const diff = Math.abs(this.m_score1 - this.m_score2);
+      if (diff === 1) {
+        // advantage
+        if (this.m_score1 > this.m_score2) {
+          score = "Advantage player1";
+        } else {
+          score = "Advantage player2";
+        }
+      } else if (diff >= 2) {
+        // finish
+        if (this.m_score1 > this.m_score2) {
+          score = "Win for player1";
+        } else {
+          score = "Win for player2";
+        }
+      }
       // NOTE: when the game is not finished, and both player scores are not equal
     } else {
       for (let i = 1; i < 3; i++) {
