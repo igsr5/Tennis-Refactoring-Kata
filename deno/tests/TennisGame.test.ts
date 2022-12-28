@@ -1,12 +1,10 @@
 import scores from "./scores.json" assert { type: "json" };
 import { assertEquals } from "testing/asserts.ts";
 
-import {
-  TennisGame,
-  TennisGame1,
-  TennisGame2,
-  TennisGame3,
-} from "../src/dev.ts";
+import { TennisGame } from "../src/TennisGame.ts";
+import { TennisGame1 } from "../src/TennisGame1.ts";
+import { TennisGame2 } from "../src/TennisGame2.ts";
+import { TennisGame3 } from "../src/TennisGame3.ts";
 
 type Score = [number, number, string];
 

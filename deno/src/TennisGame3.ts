@@ -1,4 +1,4 @@
-import { TennisGame } from "./dev.ts";
+import { TennisGame } from "./TennisGame.ts";
 
 export class TennisGame3 implements TennisGame {
   private p2: number = 0;
