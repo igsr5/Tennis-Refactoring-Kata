@@ -37,7 +37,7 @@ export class TennisGame1 implements TennisGame {
           score = "Deuce";
           break;
       }
-      // NOTE: when finish the game
+      // NOTE: when finish the game, or advantage
     } else if (this.m_score1 >= 4 || this.m_score2 >= 4) {
       const minusResult: number = this.m_score1 - this.m_score2;
       if (minusResult === 1) score = "Advantage player1";
